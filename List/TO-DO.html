@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-xl font-bold mb-4">To-Do List</h2>
+        <div class="flex mb-4">
+            <input id="taskInput" type="text" class="border p-2 flex-grow rounded" placeholder="Add a new task">
+            <button onclick="addTask()" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Add</button>
+        </div>
+        <ul id="taskList" class="space-y-2"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+            if (taskText === '') return;
+
+            const taskList = document.getElementById('taskList');
+            const li = document.createElement('li');
+            li.className = "flex justify-between items-center bg-gray-200 p-2 rounded";
+            li.innerHTML = `
+                <span class="flex-grow">${taskText}</span>
+                <button onclick="markDone(this)" class="bg-green-500 text-white px-2 py-1 rounded">Done</button>
+                <button onclick="editTask(this)" class="bg-yellow-500 text-white px-2 py-1 rounded ml-2">Edit</button>
+                <button onclick="deleteTask(this)" class="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+            `;
+            taskList.appendChild(li);
+            taskInput.value = '';
+        }
+
+        function markDone(button) {
+            const task = button.parentElement;
+            const taskText = task.querySelector('span');
+            taskText.classList.toggle('line-through');
+            button.textContent = taskText.classList.contains('line-through') ? 'Undo' : 'Done';
+        }
+
+        function editTask(button) {
+            const task = button.parentElement;
+            const taskText = task.querySelector('span');
+            const newText = prompt('Edit task:', taskText.textContent);
+            if (newText !== null) taskText.textContent = newText;
+        }
+
+        function deleteTask(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
